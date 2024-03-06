@@ -1,10 +1,12 @@
 <?php
 
+use App\Models\Rooms;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Maatwebsite\Excel\Facades\Excel;
 
-class CreateHostelsTable extends Migration
+class CreateImporthostelTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +15,7 @@ class CreateHostelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('_hostels', function (Blueprint $table) {
-            $table->string('Hostels');
-            $table->string('Room_No');
-
-            $table->primary(['Hostels', 'Room_No']);
-        });
+        Excel::import(new \App\Imports\HostelImport,'public\data\HOSTELS.xlsx');
     }
 
     /**
@@ -28,6 +25,6 @@ class CreateHostelsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('_hostels');
+        Schema::dropIfExists('importhostel');
     }
 }

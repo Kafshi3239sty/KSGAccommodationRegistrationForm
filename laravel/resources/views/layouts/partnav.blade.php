@@ -1,3 +1,4 @@
+@inject('part', 'App\Http\Controllers\Participant')
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -12,8 +13,11 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    <x-nav-link :href="route('check_in')" :active="request()->routeIs('check_in')">
                         {{ __('Dashboard') }}
+                    </x-nav-link>
+                    <x-nav-link :href="url('participant/dashboard/wait')" :active="request()->url('admin/Checkins')">
+                        {{ ('Check out area') }}<span class="badge badge-light">{{ $part->checkinsCount()->count() ?? 0 }}</span>
                     </x-nav-link>
                 </div>
             </div>

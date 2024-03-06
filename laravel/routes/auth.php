@@ -23,23 +23,13 @@ Route::middleware('guest')->group(function () {
     Route::get('participant/register/page2', [Participant::class, 'confirmpage']);
     Route::post('participant/register/page2', [Participant::class, 'confirm'])->name('confirm');
 
+    #Participant login routes
+    Route::get('participant/login', [Participant::class, 'loginpage'])->name('login');
+    Route::post('participant/login', [Participant::class, 'login']);
 
-    Route::get('login', [AuthenticatedSessionController::class, 'create'])
-        ->name('login');
-
-    Route::post('login', [AuthenticatedSessionController::class, 'store']);
-
-    Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
-        ->name('password.request');
-
-    Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
-        ->name('password.email');
-
-    Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
-        ->name('password.reset');
-
-    Route::post('reset-password', [NewPasswordController::class, 'store'])
-        ->name('password.update');
+    #Admin Login routes
+    Route::get('admin/Login', [Admin::class, 'loginpage'])->name('adm');
+    Route::post('admin/Login', [Admin::class, 'login']);
 });
 
 Route::middleware('participant')->group(function () {
@@ -64,26 +54,30 @@ Route::middleware('participant')->group(function () {
     Route::get('participant/dashboard', [Participant::class, 'viewDashboard'])->name('check_in');
     Route::post('participant/dashboard', [Participant::class, 'check_in']);
 
-    #Dashboard routes
+    #Waitarea routes
     Route::get('participant/dashboard/wait', [Participant::class, 'waitarea']);
+
+    #Checkout routes
+    Route::put('participant/dashboard/Checkout/{id}', [Participant::class, 'checkout']);
 });
 
-Route::middleware('participant')->group(function () {
-
-    #Admin Login routes
-    Route::get('admin/Login', [Admin::class, 'loginpage'])->name('adm');
-    Route::post('admin/Login', [Admin::class, 'login']);
+Route::middleware('admin')->group(function () {
 
     #Admin Dashboard routes
     Route::get('admin/dashboard', [Admin::class, 'AdmDashboard']);
 
     #Admin Checkin routes
-    Route::get('admin/Checkins', [Admin::class, 'Checkins'])->name('checkins');
-    Route::get('admin/confirmCheckIn', [Admin::class, 'allocate']);
+    Route::get('admin/Checkins', [Admin::class, 'Checkins']);
+
+    #Admin Allocate routes
+    Route::get('admin/Checkins/allocate/{id}', [Admin::class, 'Checkinpart']);
+    Route::put('allocate/{id}', [Admin::class, 'allocate']);
 
     #Admin Checkout routes
     Route::get('admin/Checkouts', [Admin::class, 'Checkouts']);
-    Route::get('admin/confirmCheckout', [Admin::class, 'checkoutby']);
+
+    #Admin Checkout allocation routes
+    Route::put('admin/confirmCheckout/{id}', [Admin::class, 'checkoutby']);
 });
 
 Route::middleware('auth')->group(function () {

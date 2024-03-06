@@ -21,4 +21,8 @@ class Course extends Model
     public function participant(){
         return $this->belongsTo(Participant::class);
     }
+
+    public function accommodations(){
+        return $this->hasMany(Participant::class);
+    }
 }

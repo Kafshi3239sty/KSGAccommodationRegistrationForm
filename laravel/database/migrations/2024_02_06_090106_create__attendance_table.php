@@ -19,7 +19,7 @@ class CreateAttendanceTable extends Migration
             $table->integer('Participant_id');
             $table->integer('Admin_id')->nullable();
             $table->string('Hostels')->nullable();
-            $table->integer('Room_No')->nullable();
+            $table->string('Room_No')->nullable();
             $table->timestamp('Check_in')->nullable();
             $table->timestamp('Check_out')->nullable();
             $table->timestamp('Check_in_by')->nullable();

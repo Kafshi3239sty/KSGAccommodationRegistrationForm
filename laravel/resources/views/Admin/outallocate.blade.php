@@ -2,23 +2,23 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Check Ins') }}
+            {{ __('Check Outs') }}
         </h2>
     </x-slot>
 
-    @if ($admin->checkinsCount()->count() == 1)
+    @if ($admin->checkoutsCount()->count() == 1)
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    You have {{ $admin->checkinsCount()->count() ?? 0 }} checked in participant at the moment.
+                    You have {{ $admin->checkoutsCount()->count() ?? 0 }} checked out participant at the moment.
                 </div>
             </div>
         </div>
     </div>
     <div class="card mb-4">
         <div class="card-header pb-0">
-            Checked in Participants
+            Checked out Participants
         </div>
         <div class="card-body px-0 pt-0 pb-2">
             <div class="table-responsive p-0">
@@ -27,36 +27,38 @@
                         <tr>
                             <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Full Names</th>
                             <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Course</th>
-                            <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Check in Time</th>
+                            <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Check out Time</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($checkins as $checkin)
+                        @foreach ($checkouts as $checkout)
                         <tr>
                             <td>
-                                @if ($participant = $checkin->participants->first())
+                                @if ($participant = $checkout->participants->first())
                                 <p class="text-xs px-3 font-weight-bold mb-0">{{ $participant->Full_Names }}</p>
                                 @else
                                 <p class="text-xs px-3 font-weight-bold mb-0">No participant found</p>
                                 @endif
                             </td>
                             <td>
-                                @if ($course = $checkin->courses->first())
+                                @if ($course = $checkout->courses->first())
                                 <p class="text-xs px-3 font-weight-bold mb-0">{{ $course->Course_Title }}</p>
                                 @else
                                 <p class="text-xs px-3 font-weight-bold mb-0">No course found</p>
                                 @endif
                             </td>
                             <td>
-                                <p class="text-xs px-3 font-weight-bold mb-0">{{$checkin->Check_in}}</p>
+                                <p class="text-xs px-3 font-weight-bold mb-0">{{$checkout->Check_out}}</p>
                             </td>
 
                             <td class="align-middle text-center">
-                                <a href="Checkins/allocate/{{$checkin->id}}">
-                                    <x-button class="ml-4">
-                                        {{ __('Check in Participant') }}
+                                <form method="POST" action="{{ URL::to('admin/confirmCheckout/'.$checkout->id) }}">
+                                    @csrf
+                                    @method('PUT')
+                                    <x-button class="ml-3">
+                                        {{ __('Check out') }}
                                     </x-button>
-                                </a>
+                                </form>
                             </td>
                         </tr>
                         @endforeach
@@ -66,19 +68,19 @@
             </div>
         </div>
     </div>
-    @elseif ($admin->checkinsCount()->count() > 1)
+    @elseif ($admin->checkoutsCount()->count() > 1)
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    You have {{ $admin->checkinsCount()->count() ?? 0 }} checked in participants at the moment.
+                    You have {{ $admin->checkoutsCount()->count() ?? 0 }} checked out participants at the moment.
                 </div>
             </div>
         </div>
     </div>
     <div class="card mb-4">
         <div class="card-header pb-0">
-            Checked in Participants
+            Checked out Participants
         </div>
         <div class="card-body px-0 pt-0 pb-2">
             <div class="table-responsive p-0">
@@ -87,36 +89,38 @@
                         <tr>
                             <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Full Names</th>
                             <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Course</th>
-                            <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Check in Time</th>
+                            <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Check out Time</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($checkins as $checkin)
+                        @foreach ($checkouts as $checkout)
                         <tr>
                             <td>
-                                @if ($participant = $checkin->participants->first())
+                                @if ($participant = $checkout->participants->first())
                                 <p class="text-xs px-3 font-weight-bold mb-0">{{ $participant->Full_Names }}</p>
                                 @else
                                 <p class="text-xs px-3 font-weight-bold mb-0">No participant found</p>
                                 @endif
                             </td>
                             <td>
-                                @if ($course = $checkin->courses->first())
+                                @if ($course = $checkout->courses->first())
                                 <p class="text-xs px-3 font-weight-bold mb-0">{{ $course->Course_Title }}</p>
                                 @else
                                 <p class="text-xs px-3 font-weight-bold mb-0">No course found</p>
                                 @endif
                             </td>
                             <td>
-                                <p class="text-xs px-3 font-weight-bold mb-0">{{$checkin->Check_in}}</p>
+                                <p class="text-xs px-3 font-weight-bold mb-0">{{$checkout->Check_out}}</p>
                             </td>
 
                             <td class="align-middle text-center">
-                                <a href="Checkins/allocate/{{$checkin->id}}">
-                                    <x-button class="ml-4">
-                                        {{ __('Check in Participant') }}
+                                <form method="POST" action="{{ URL::to('admin/confirmCheckout/'.$checkout->id) }}">
+                                    @csrf
+                                    @method('PUT')
+                                    <x-button class="ml-3">
+                                        {{ __('Check out') }}
                                     </x-button>
-                                </a>
+                                </form>
                             </td>
                         </tr>
                         @endforeach
@@ -131,7 +135,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    You have no checked in participants at the moment.
+                    You have no checked out participants at the moment.
                 </div>
             </div>
         </div>

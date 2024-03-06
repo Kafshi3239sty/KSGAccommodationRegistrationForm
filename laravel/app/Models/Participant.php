@@ -48,6 +48,6 @@ class Participant extends Authenticatable implements MustVerifyEmail
     }
 
     public function accommodation(){
-        return $this->hasMany(Accommodate::class);
+        return $this->hasOne(Accommodate::class);
     }
 }

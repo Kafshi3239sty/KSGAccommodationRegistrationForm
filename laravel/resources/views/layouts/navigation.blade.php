@@ -1,3 +1,4 @@
+@inject('admin', 'App\Http\Controllers\Admin')
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -13,10 +14,13 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="url('admin/dashboard')" :active="request()->url('admin/dashboard')">
-                        {{ __('Dashboard') }}
+                        {{ ('Dashboard') }}
                     </x-nav-link>
                     <x-nav-link :href="url('admin/Checkins')" :active="request()->url('admin/Checkins')">
-                        {{ __('Check in Participants') }}<span class="badge badge-light">4</span>
+                        {{ ('Check in Participants') }}<span class="badge badge-light">{{ $admin->checkinsCount()->count() ?? 0 }}</span>
+                    </x-nav-link>
+                    <x-nav-link :href="url('admin/Checkouts')" :active="request()->url('admin/Checkouts')">
+                        {{ ('Check out Participants') }}<span class="badge badge-light">{{ $admin->checkoutsCount()->count() ?? 0 }}</span>
                     </x-nav-link>
                 </div>
             </div>

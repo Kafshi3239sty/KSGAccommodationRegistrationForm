@@ -53,6 +53,36 @@ class Participant extends Controller
         return redirect('participant/register/page2');
     }
 
+    public function loginpage()
+    {
+
+        return view('Participant/login');
+    }
+
+    public function login(Request $request)
+    {
+
+        // Validate the form data
+        $credentials =  $request->validate([
+            'National_id' => 'required|numeric',
+        ]);
+
+        // Retrieve the participant based on the National_id
+        $participant = ModelsParticipant::where('National_id', $credentials['National_id'])->first();
+        $course = Course::where('National_id', $participant)->get();
+
+        if ($participant) {
+            // Authenticate the participant
+            Auth::guard('participant')->login($participant);
+            return redirect('participant/dashboard');
+        } else {
+            // Participant not found
+            return redirect('participant/login')->withErrors([
+                'National_id' => 'Invalid National ID or Passport',
+            ]);
+        }
+    }
+
     public function confirmpage()
     {
 
@@ -99,6 +129,8 @@ class Participant extends Controller
         $cour = new Course();
         $cour->National_id = $part->National_id;
         $cour->Course_Title = $request->name;
+        $cour->From = $request->From;
+        $cour->To = $request->To;
         $cour->save();
 
         return redirect('participant/register/page4');
@@ -173,47 +205,62 @@ class Participant extends Controller
         return redirect('participant/dashboard')->with('status', 'Your are successfully registered');
     }
 
-    public function viewDashboard(){
-        
+    public function viewDashboard()
+    {
+
         $part = auth()->guard('participant')->user();
 
         $course = Course::where('National_id', $part->National_id)->get();
         $header = 'Dashboard';
         $slot = "You're registered!";
 
-        return view('dashboard', ['part'=> $part, 'course'=> $course, 'header' => $header, 'slot' => $slot]);
+        return view('dashboard', ['part' => $part, 'course' => $course, 'header' => $header, 'slot' => $slot]);
     }
 
     public function check_in(Request $request)
-{
-    $part = auth()->guard('participant')->user();
-    $courseId = $request->input('cours');
+    {
+        $part = auth()->guard('participant')->user();
+        $courseId = $request->input('cours');
 
-    $course = Course::where('National_id', $part->National_id)
-                    ->where('id', $courseId)
-                    ->first();
+        $course = Course::where('National_id', $part->National_id)
+            ->where('id', $courseId)
+            ->first();
 
-    if ($course) {
-        $att = new Accommodate();
-        $att->Participant_id = $part->National_id;
-        $att->Course_id = $courseId;
-        $att->Check_in = Carbon::now();
-        $att->save();
+        if ($course) {
+            $att = new Accommodate();
+            $att->Participant_id = $part->National_id;
+            $att->Course_id = $courseId;
+            $att->Check_in = Carbon::now();
+            $att->save();
 
-        return redirect('participant/dashboard/wait'); // Redirect to the wait area
-    } else {
-        // Handle the case where the participant is not associated with any course
-        // You might want to display an error message or handle this case differently
-        return redirect()->back()->with('error', 'You are not associated with any course.');
+            return redirect('participant/dashboard/wait'); // Redirect to the wait area
+        } else {
+            // Handle the case where the participant is not associated with any course
+            // You might want to display an error message or handle this case differently
+            return redirect()->back()->with('error', 'You are not associated with any course.');
+        }
     }
-}
-    
 
-    public function waitarea(){
+    public function checkinsCount()
+    {
+        return Accommodate::where('Check_out_by', null)->where('Check_out', null)->get();
+    }
 
-        $header = 'Wait area';
-        $slot = 'Kindly wait to be checked in...';
+    public function waitarea()
+    {
 
-        return view('waitarea', ['header'=> $header, 'slot'=>$slot]);
+        $part = auth()->guard('participant')->user();
+        $checkins = Accommodate::where('Check_out_by', null)->where('Participant_id', $part->National_id)->where('Check_out', null)->get();
+
+        return view('waitarea', ['part' => $part, 'checkins' => $checkins]);
+    }
+
+
+    public function checkout(Request $request, $id)
+    {
+        $acc = Accommodate::find($id);
+        $acc->Check_out = Carbon::now();
+        $acc->save();
+        return redirect('participant/dashboard');
     }
 }

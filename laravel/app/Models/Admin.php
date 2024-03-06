@@ -19,10 +19,8 @@ class Admin extends Authenticatable implements MustVerifyEmail
         'National_id'
     ];
 
-    public function notify($instance)
+    public function accommodations()
     {
-        return $this->forceFill(array_merge($this->toArray(), [
-            'notification' => serialize($instance),
-        ]));
+        return $this->hasMany(Participant::class);
     }
 }

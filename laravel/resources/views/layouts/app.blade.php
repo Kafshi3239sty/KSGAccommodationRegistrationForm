@@ -1,3 +1,4 @@
+@inject('checkins', 'App\Http\Controllers\Admin')
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -22,7 +23,7 @@
 
 <body class="font-sans antialiased">
     <div class="min-h-screen bg-gray-100">
-        @include('layouts.navigation')
+        @include('layouts.navigation', ['checkins' => $checkins])
 
         <!-- Page Heading -->
         <header class="bg-white shadow">

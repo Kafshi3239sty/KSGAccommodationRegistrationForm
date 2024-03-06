@@ -1,12 +1,12 @@
 <x-guest-layout>
     <x-auth-card>
         <x-slot name="logo">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+            <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
         </x-slot>
 
         <!-- Validation Errors -->
         <x-auth-validation-errors class="mb-4" :errors="$errors" />
-
+        
         <form method="POST" action="{{ route('register') }}">
             @csrf
 
@@ -16,7 +16,7 @@
 
                 <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus />
             </div>
-            
+
 
             <!-- ID/Passport No. -->
             <div class="mt-4">
@@ -39,7 +39,7 @@
             <div class="mt-4">
                 <x-label for="Gender" :value="__('Gender')" />
                 <select id="Gender" class="form-select-lg mb-3 form-control" name="Gender" required name="Gender">
-                @foreach ($genders as $gender)
+                    @foreach ($genders as $gender)
                     <option value="{{$gender->id}}">{{ $gender->type }}</option>
                     @endforeach
                 </select>
@@ -61,7 +61,7 @@
             </div>
 
             <div class="pagination flex items-center justify-end mt-4">
-                <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('confirm') }}\">
+                <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ URL::to('participant/login') }}">
                     {{ __('Already registered?') }}
                 </a>
 

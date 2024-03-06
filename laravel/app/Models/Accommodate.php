@@ -27,7 +27,7 @@ class Accommodate extends Model
 
     public function courses()
     {
-        return $this->hasOne(Course::class, 'Course_id', 'id');
+        return $this->belongsTo(Course::class, 'Course_id', 'id');
     }
 
     public function rooms()
@@ -37,6 +37,11 @@ class Accommodate extends Model
 
     public function participants()
     {
-        return $this->hasMany(Participant::class, 'Participant_id', 'National_id');
+        return $this->belongsTo(Participant::class, 'Participant_id', 'National_id');
+    }
+
+    public function admins()
+    {
+        return $this->belongsTo(Admin::class, 'Admin_id', 'National_id');
     }
 }

@@ -22,6 +22,10 @@ class Rooms extends Model
 
     public $timestamps = false;
 
+    protected $casts = [
+        'Hostels' => 'array', // or any other data type you want to cast "Hostels" to
+    ];
+
     public function accommodation()
     {
         return $this->hasMany(Accommodate::class);
