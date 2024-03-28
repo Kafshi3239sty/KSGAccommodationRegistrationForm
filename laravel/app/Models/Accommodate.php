@@ -32,7 +32,7 @@ class Accommodate extends Model
 
     public function rooms()
     {
-        return $this->hasOne(Rooms::class, ['Hostels', 'Room_No'], ['Hostels', 'Room_No']);
+        return $this->belongsTo(Rooms::class, ['Hostels', 'Room_No'], ['Hostels', 'Room_No']);
     }
 
     public function participants()

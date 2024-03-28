@@ -263,4 +263,15 @@ class Participant extends Controller
         $acc->save();
         return redirect('participant/dashboard');
     }
+
+    public function destroy(Request $request)
+    {
+        Auth::guard('participant')->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('admin/Login');
+    }
 }

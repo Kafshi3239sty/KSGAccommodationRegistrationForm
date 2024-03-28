@@ -15,16 +15,8 @@ class HostelImport implements ToModel, WithHeadingRow
     */
     public function model(array $row)
     {
-        if (isset($row['hostels'])) {
-            // Access the 'HOSTELS' element here
-            $hostel = $row['hostels'];
-        } else {
-            // Handle the case where the 'HOSTELS' key does not exist in the array
-            echo "The 'HOSTELS' key does not exist in the array.";
-        }
-    
         return new Rooms([
-            'Hostels' => $hostel,
+            'Hostels' => $row['hostels'],
             'Room_No' => $row['room_no'],
         ]);
     }

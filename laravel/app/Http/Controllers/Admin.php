@@ -70,7 +70,7 @@ class Admin extends Controller
         $acc = Accommodate::find($id);
         $admin = auth()->guard('admin')->user();
         $acc->Admin_id = $admin->National_id;
-        $acc->Hostels = $request->Residential;
+        $acc->Hostels = "$request->Residential";
         $acc->Room_No = $request->Room;
         $acc->Check_in_by = Carbon::now();
         $acc->save();
@@ -79,7 +79,7 @@ class Admin extends Controller
 
     public function checkoutsCount()
     {
-        return Accommodate::where('Check_out_by', null)->get();
+        return Accommodate::whereNull('Check_out_by')->whereNotNull('Check_out')->get();
     }
 
     public function Checkouts()
@@ -91,11 +91,21 @@ class Admin extends Controller
     }
 
 
-    public function checkoutby(Request $request, $id)
+    public function checkoutby($id)
     {
         $acc = Accommodate::find($id);
         $acc->Check_out_by = Carbon::now();
         $acc->save();
         return redirect('admin/dashboard');
+    }
+
+    public function destroy(Request $request){
+        Auth::guard('admin')->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('admin/Login');
     }
 }

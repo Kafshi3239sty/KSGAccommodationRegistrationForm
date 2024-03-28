@@ -59,6 +59,10 @@ Route::middleware('participant')->group(function () {
 
     #Checkout routes
     Route::put('participant/dashboard/Checkout/{id}', [Participant::class, 'checkout']);
+
+    #Participant Logout route
+    Route::post('participant/logout', [Participant::class, 'destroy'])
+        ->name('partlogout');
 });
 
 Route::middleware('admin')->group(function () {
@@ -78,6 +82,10 @@ Route::middleware('admin')->group(function () {
 
     #Admin Checkout allocation routes
     Route::put('admin/confirmCheckout/{id}', [Admin::class, 'checkoutby']);
+
+    #Admin Logout route
+    Route::post('admin/logout', [Admin::class, 'destroy'])
+        ->name('adminlogout');
 });
 
 Route::middleware('auth')->group(function () {

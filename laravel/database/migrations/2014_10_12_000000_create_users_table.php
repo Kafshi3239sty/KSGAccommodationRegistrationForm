@@ -21,6 +21,12 @@ class CreateUsersTable extends Migration
 
 
         });
+
+        DB::table('users')->insert([
+            ['type' => 'Admin'],
+            ['type' => 'Participant'],
+            ['type' => 'Next of Kin']
+        ]);
     }
 
     /**

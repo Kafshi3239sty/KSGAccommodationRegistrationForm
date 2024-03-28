@@ -11,10 +11,7 @@ class Rooms extends Model
 
 
     protected $table = "_hostels";
-    protected $primaryKey = [
-        'Hostels',
-        'Room_No',
-    ];
+    protected $primaryKey = 'Hostels.Room_No';
     protected $fillable = [
         'Hostels',
         'Room_No',
@@ -22,12 +19,9 @@ class Rooms extends Model
 
     public $timestamps = false;
 
-    protected $casts = [
-        'Hostels' => 'array', // or any other data type you want to cast "Hostels" to
-    ];
 
     public function accommodation()
     {
-        return $this->hasMany(Accommodate::class);
+        return $this->hasOne(Accommodate::class);
     }
 }

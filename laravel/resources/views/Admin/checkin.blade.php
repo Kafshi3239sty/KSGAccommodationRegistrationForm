@@ -23,7 +23,7 @@
             <div class="mt-4">
                 <x-label for="Room Number" :value="__('Allocate Room Number:')" />
 
-                <x-input id="Room" class="block mt-1 w-full" type="number" name="Room" :value="old('Room')" required />
+                <x-input id="Room" class="block mt-1 w-full" type="text" name="Room" :value="old('Room')" required />
             </div>
 
             <div class="flex items-center justify-end mt-4">
